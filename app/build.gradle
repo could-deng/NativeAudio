@@ -1,0 +1,102 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.example.nativeaudio"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        ndk {
+//            moduleName "JniDemo"  //读取.so文件
+            moduleName "native-audio-jni" //定义全部C文件，设为该名，用来被读取读取
+//            ldLibs "log", "OpenSLES", "android"
+//            stl "stlport_shared"
+
+
+            //cFlags
+            //abiFilters "armeabi", "x86" , "armeabi-v7a"
+        }
+
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //
+//
+    sourceSets.main {
+        jniLibs.srcDir 'src/main/jniLibs'
+        jni.srcDirs = [] //disable automatic ndk-build call, which ignore our Android.mk
+    }
+
+
+
+
+
+
+    // call regular ndk-build(.cmd) script from app directory
+//    task ndkBuild(type: Exec) {
+//        workingDir file('src/main/jni')
+//        commandLine getNdkBuildCmd()
+//    }
+
+//    tasks.withType(JavaCompile) {
+//        compileTask -> compileTask.dependsOn ndkBuild
+//    }
+
+//    task cleanNative(type: Exec) {
+//        workingDir file('src/main')
+//        commandLine getNdkBuildCmd(), 'clean'
+//    }
+//    clean.dependsOn cleanNative
+
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+}
+
+// call regular ndk-build(.cmd) script from app directory
+//task ndkBuild(type: Exec) {
+//    workingDir file('src/main/jni')
+//    commandLine getNdkBuildCmd()
+//}
+//
+//task cleanNative(type: Exec) {
+//    workingDir file('src/main')
+//    commandLine getNdkBuildCmd(), 'clean'
+//}
+//def getNdkDir() {
+//    if (System.env.ANDROID_NDK_ROOT != null)
+//        return System.env.ANDROID_NDK_ROOT
+//
+//    Properties properties = new Properties()
+//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//    def ndkDir = properties.getProperty('ndk.dir', null)
+//    if (ndkDir == null)
+//        throw new GradleException("NDK location not found. Define location with ndk.dir in the local.properties file or with an ANDROID_NDK_ROOT environment variable.")
+//
+//    return ndkDir
+//}
+//
+//def getNdkBuildCmd() {
+//    def ndkBuild = getNdkDir() + "/ndk-build"
+//    if (Os.isFamily(Os.FAMILY_WINDOWS))
+//        ndkBuild += ".cmd"
+//
+//    return ndkBuild
+//}
+
+
